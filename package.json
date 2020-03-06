@@ -1,0 +1,25 @@
+{
+  "name": "haveibeenpwnedchecker",
+  "version": "1.0.0",
+  "description": "Checks passwords for appearing in breaches using HaveIBeenPwned",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/AstroGD/haveibeenpwnedchecker.git"
+  },
+  "author": "AstroGD Lukas Weber",
+  "license": "CC-BY-NC-ND-4.0",
+  "bugs": {
+    "url": "https://gitlab.com/AstroGD/haveibeenpwnedchecker/issues"
+  },
+  "homepage": "https://gitlab.com/AstroGD/haveibeenpwnedchecker#readme",
+  "dependencies": {
+    "follow-redirects": "^1.10.0"
+  },
+  "devDependencies": {
+    "jest": "^25.1.0"
+  }
+}
