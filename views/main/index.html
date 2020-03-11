@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaveIBeenPwned Checker</title>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="fontawesome/css/all.css">
+    <link rel="stylesheet" href="main.css">
+    <script src="jquery.js"></script>
+    <script src="sweetalert.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script src="main.js"></script>
+</head>
+
+<body class="container">
+    <!--<button type="button" class="btn primary" onclick="toggleTheme()" id="toggleTheme"><i class="fas themeSwitch"></i></button>-->
+    <div class="content text-center mt-5 shadow p-4 rounded">
+        <h1 class="no-select">Have I been Pwned Checker</h1>
+        <div class="status mx-auto mb-5" id="statusCircle">
+            <i class="fas statusIcon align-middle mx-auto" id="statusIcon"></i>
+            <div class="sk-chase" id="statusLoading" style="display: none;">
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+                <div class="sk-chase-dot"></div>
+            </div>
+        </div>
+        <div class="px-5 text-left mb-5">
+            <label for="passwordInput" class="no-select">Password</label>
+            <input type="password" class="form-control form-control-lg" id="passwordInput" autocomplete="off" readonly
+                onfocus="blocked ? '' : this.removeAttribute('readonly');" onfocusout="blocked ? '' : this.setAttribute('readonly','readonly');">
+        </div>
+    </div>
+</body>
+
+</html>
