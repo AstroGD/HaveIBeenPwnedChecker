@@ -133,6 +133,8 @@ class Password extends eventEmitter {
                 });
 
                 req.end();
+
+                req.on("error", reject);
             });
         } catch (error) {
             throw error;

@@ -1,3 +1,5 @@
+const ipc = require("electron").ipcRenderer;
+
 var dark = true;
 var ready = false;
 var blocked;
@@ -63,17 +65,7 @@ function startCheck() {
 }
 
 function checkPassword() {
-    selector.statusLoading.fadeOut(400);
-    setTimeout(() => {
-        selector.password.val("");
-        selector.password.attr("readonly", false);
-        selector.password.focus();
-        blocked = false;
-        selector.statusIcon.fadeIn(400);
-        if (Math.random() >= 0.5) statusDanger();
-        else statusNoWorries();
-        checkInput();
-    }, 400);
+    ipc.send("check", selector.password.val());
 }
 
 function statusDanger() {
@@ -98,6 +90,49 @@ function statusNoWorries() {
     document.documentElement.style.setProperty("--status-icon", iconCheck);
 }
 
+ipc.once("version", (_event, version) => {
+    window.requestAnimationFrame(() => {
+        selector.version.html(`V ${version}`);
+        ipc.send("ready");
+    });
+});
+
+ipc.on("result", (_event, breached) => {
+    selector.statusLoading.fadeOut(400);
+    setTimeout(() => {
+        selector.password.val("");
+        selector.password.attr("readonly", false);
+        selector.password.focus();
+        blocked = false;
+        selector.statusIcon.fadeIn(400);
+        if (breached) statusDanger();
+        else statusNoWorries();
+        checkInput();
+    }, 400);
+});
+
+ipc.on("timeout", () => {
+    selector.statusLoading.fadeOut(400);
+    setTimeout(() => {
+        selector.password.val("");
+        selector.password.attr("readonly", false);
+        selector.password.focus();
+        blocked = false;
+        selector.statusIcon.fadeIn(400);
+        document.documentElement.style.setProperty("--status-icon", iconSearch);
+        selector.password.val("");
+        selector.password.attr("readonly", false);
+        selector.password.focus();
+        blocked = false;
+        swal({
+            title: "Whoops!",
+            text: "I'm sorry, but the request took too long to process.\nPlease check your internet connection and antivirus software or contact my developer:\n\nsupport@astrogd.eu",
+            icon: "warning"
+        });
+        checkInput();
+    }, 400);
+});
+
 $(document).ready(() => {
     selector = {
         window: $(window),
@@ -105,7 +140,11 @@ $(document).ready(() => {
         password: $("#passwordInput"),
         statusIcon: $("#statusIcon"),
         statusLoading: $("#statusLoading"),
-        body: $("body")
+        body: $("body"),
+        minimize: $("#minimize"),
+        maximize: $("#maximize"),
+        close: $("#close"),
+        version: $("#version")
     };
 
     width = selector.window.width();
@@ -132,4 +171,18 @@ $(document).ready(() => {
         e.preventDefault();
         startCheck();
     });
+
+    selector.minimize.click(() => {
+        ipc.send("minimize");
+    });
+
+    selector.maximize.click(() => {
+        ipc.send("maximize");
+    });
+
+    selector.close.click(() => {
+        ipc.send("close");
+    });
+
+    ipc.send("loaded");
 });

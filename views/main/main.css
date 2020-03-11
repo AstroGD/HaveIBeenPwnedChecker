@@ -17,6 +17,62 @@ body {
     }*/
 }
 
+body #windowbar {
+  -webkit-app-region: drag;
+  height: 30px;
+  background-color: #222222;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+body #windowbar #title > span {
+  color: #929292;
+}
+
+body #windowbar #menuAction {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+body #windowbar #menuAction > div {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  margin-left: 5px;
+  border-radius: 10%;
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+body #windowbar #menuAction > div:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+body #windowbar #menuAction > div#close:hover {
+  background-color: #af2d2d;
+}
+
+body #windowbar #menuAction > div > i {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 body > div.content {
   z-index: 10;
   color: #f3f3f3;

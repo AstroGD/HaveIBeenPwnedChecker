@@ -130,7 +130,15 @@ describe(`Password`, () => {
             'maxRedirects': 20
         };
 
+        let faultyRequestOptions2 = {
+            'method': 'GET',
+            'hostname': 'somethingswrong.astrogd.dev',
+            'path': `/range/axz12`, //Not a valid hex formatted string
+            'maxRedirects': 20
+        };
+
         await expect(password.check(faultyRequestOptions)).rejects.toThrow();
+        await expect(password.check(faultyRequestOptions2)).rejects.toThrow();
     });
 
     test(`Querying Database with a password that is not (likely to be) breached`, async () => {

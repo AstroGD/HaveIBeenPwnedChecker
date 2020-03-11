@@ -19,6 +19,53 @@ body {
         margin: 20px;
     }*/
 
+    #windowbar {
+        -webkit-app-region: drag;
+        height: 30px;
+        background-color: $dark;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        #title>span {
+            color: rgb(146, 146, 146);
+        }
+
+        #menuAction {
+            display: flex;
+            flex-direction: row;
+            position: fixed;
+            top: 0;
+            right: 0;
+
+            >div {
+                -webkit-app-region: no-drag;
+                cursor: pointer;
+                width: 30px;
+                height: 30px;
+                margin-left: 5px;
+                border-radius: 10%;
+                text-align: center;
+                display: flex;
+                align-items: center;
+
+                &:hover {
+                    background-color: rgba(255, 255, 255, 0.3);
+                }
+
+                &#close:hover {
+                    background-color: rgb(175, 45, 45);
+                }
+
+                >i {
+                    margin-left: auto;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+
     >div.content {
         z-index: 10;
         color: $bright;
