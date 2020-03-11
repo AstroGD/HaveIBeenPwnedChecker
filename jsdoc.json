@@ -1,0 +1,34 @@
+{
+    "tags": {
+      "allowUnknownTags": true,
+      "dictionaries": [
+        "jsdoc",
+        "closure"
+      ]
+    },
+    "source": {
+      "include": [
+        "classes"
+      ],
+      "includePattern": ".+\\.js(doc)?$",
+      "excludePattern": "(^|\\/|\\\\)_"
+    },
+    "opts": {
+      "template": "./node_modules/minami",
+      "prism-theme": "prism-okaidia",
+      "encoding": "utf8",
+      "destination": "./docs/",
+      "recurse": true
+    },
+    "plugins": [
+      "plugins/markdown",
+      "plugins/summarize"
+    ],
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false
+    },
+    "metadata": {
+      "title": "HaveIBeenPwned PwnCheck.js"
+    }
+  }

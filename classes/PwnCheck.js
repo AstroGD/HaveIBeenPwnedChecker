@@ -13,11 +13,7 @@ const https = require('follow-redirects').https;
  * @property {boolean} ready                    - Indicates whether the password has been hashed and is ready to be checked
  * @property {string} hash                      - The hashed password. Available after the ready event
  * @property {string} identifier                - The first five characters of the hash. This will be sent to HIBP
- * @property {object} requestOptions            - Options for the request that querys the HIBP database
- * @property {string} requestOptions.method             - HTTP method that will be used for the request
- * @property {string} requestOptions.hostname           - Hostname that will be requested (example.org NOT example.org/bla/blablubb)
- * @property {string} requestOptions.path               - Path on the host that will be requested (/bla/blablubb NOT example.org/bla/blablubb or example.org)
- * @property {number} requestOptions.maxRedirects       - Max redirects allowed before the request fails and throws an error
+ * @property {requestOptions} requestOptions    - Options for the request that querys the HIBP database
  * @property {string} rawResponse               - The raw data that was sent from the api
  * @property {boolean} breached                 - Indicates whether the password was breached and therefore found in the database of HIBP
  * @property {number} howOftenBreached          - number of incidents that diclosed the password
@@ -31,6 +27,8 @@ class Password extends eventEmitter {
 
         //Will be true after the init function finished
         this.ready = false;
+
+        if (password === undefined || password === null) throw new TypeError(`password must be defined and not null`);
 
         this.init(password.toString());
     }
@@ -72,7 +70,11 @@ class Password extends eventEmitter {
     /**
      * Checks the Password for being present in the HIBP Database
      * 
+     * @param {requestOptions} [requestOptions] - Override to the default request options to request HIBP
      * @returns {Promise<boolean>}              - Returns a boolean indicating whether the password has been breached or not
+     * @fires Password#checked
+     * @fires Password#breached
+     * @fires Password#safe
      * @example
      * Password.check()
      *   .then(breached => {
@@ -87,15 +89,26 @@ class Password extends eventEmitter {
      *     console.error(e);
      *   });
      */
-    async check() {
+    async check(requestOptions) {
         if (!this.ready) throw new Error("The Password has not been hashed yet");
 
-        let requestOptions = {
+        /**
+         * HTTP options for a request
+         * @typedef {object} requestOptions
+         * @property {string} method            - HTTP Method to be used for the request
+         * @property {string} hostname          - Hostname that will be requested (example.org NOT example.org/bla/blablubb)
+         * @property {string} path              - Path on the host that will be requested (/bla/blablubb NOT example.org/bla/blablubb or example.org)
+         * @property {number} maxRedirects      - Max redirects allowed before the request fails and throws an error
+         */
+        let defaultRequestOptions = {
             'method': 'GET',
             'hostname': 'api.pwnedpasswords.com',
             'path': `/range/${this.identifier.toString()}`,
             'maxRedirects': 20
         };
+
+        if (!requestOptions || typeof requestOptions !== "object") requestOptions = defaultRequestOptions;
+
         this.requestOptions = requestOptions;
 
         let response;
@@ -109,6 +122,7 @@ class Password extends eventEmitter {
                     });
 
                     res.on("end", function () {
+                        if (res.statusCode !== 200) reject(new TypeError(`Request finished with a status code of ${res.statusCode} but expected 200`));
                         var body = Buffer.concat(chunks);
                         resolve(body.toString());
                     });
@@ -158,6 +172,13 @@ class Password extends eventEmitter {
              * @param {number} howOftenBreached - The number of incidents that disclosed the password
              */
             this.emit("breached", howOftenBreached);
+        } else {
+            /**
+             * Emitted whenever the password was checked and NOT found in the database of HIBP
+             * 
+             * @event Password#safe
+             */
+            this.emit("safe");
         }
 
         return breached;

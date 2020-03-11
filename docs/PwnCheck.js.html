@@ -2,22 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: PwnCheck.js</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>PwnCheck.js - Documentation</title>
 
-    <script src="scripts/prettify/prettify.js"> </script>
-    <script src="scripts/prettify/lang-css.js"> </script>
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
     <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
 </head>
-
 <body>
 
-<div id="main">
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
 
-    <h1 class="page-title">Source: PwnCheck.js</h1>
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Password.html">Password</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Password.html#check">check</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Password.html#init">init</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:breached">breached</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:checked">checked</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:ready">ready</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:safe">safe</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">PwnCheck.js</h1>
+    
 
     
 
@@ -41,11 +54,7 @@ const https = require('follow-redirects').https;
  * @property {boolean} ready                    - Indicates whether the password has been hashed and is ready to be checked
  * @property {string} hash                      - The hashed password. Available after the ready event
  * @property {string} identifier                - The first five characters of the hash. This will be sent to HIBP
- * @property {object} requestOptions            - Options for the request that querys the HIBP database
- * @property {string} requestOptions.method             - HTTP method that will be used for the request
- * @property {string} requestOptions.hostname           - Hostname that will be requested (example.org NOT example.org/bla/blablubb)
- * @property {string} requestOptions.path               - Path on the host that will be requested (/bla/blablubb NOT example.org/bla/blablubb or example.org)
- * @property {number} requestOptions.maxRedirects       - Max redirects allowed before the request fails and throws an error
+ * @property {requestOptions} requestOptions    - Options for the request that querys the HIBP database
  * @property {string} rawResponse               - The raw data that was sent from the api
  * @property {boolean} breached                 - Indicates whether the password was breached and therefore found in the database of HIBP
  * @property {number} howOftenBreached          - number of incidents that diclosed the password
@@ -59,6 +68,8 @@ class Password extends eventEmitter {
 
         //Will be true after the init function finished
         this.ready = false;
+
+        if (password === undefined || password === null) throw new TypeError(`password must be defined and not null`);
 
         this.init(password.toString());
     }
@@ -100,7 +111,11 @@ class Password extends eventEmitter {
     /**
      * Checks the Password for being present in the HIBP Database
      * 
+     * @param {requestOptions} [requestOptions] - Override to the default request options to request HIBP
      * @returns {Promise&lt;boolean>}              - Returns a boolean indicating whether the password has been breached or not
+     * @fires Password#checked
+     * @fires Password#breached
+     * @fires Password#safe
      * @example
      * Password.check()
      *   .then(breached => {
@@ -115,15 +130,26 @@ class Password extends eventEmitter {
      *     console.error(e);
      *   });
      */
-    async check() {
+    async check(requestOptions) {
         if (!this.ready) throw new Error("The Password has not been hashed yet");
 
-        let requestOptions = {
+        /**
+         * HTTP options for a request
+         * @typedef {object} requestOptions
+         * @property {string} method            - HTTP Method to be used for the request
+         * @property {string} hostname          - Hostname that will be requested (example.org NOT example.org/bla/blablubb)
+         * @property {string} path              - Path on the host that will be requested (/bla/blablubb NOT example.org/bla/blablubb or example.org)
+         * @property {number} maxRedirects      - Max redirects allowed before the request fails and throws an error
+         */
+        let defaultRequestOptions = {
             'method': 'GET',
             'hostname': 'api.pwnedpasswords.com',
             'path': `/range/${this.identifier.toString()}`,
             'maxRedirects': 20
         };
+
+        if (!requestOptions || typeof requestOptions !== "object") requestOptions = defaultRequestOptions;
+
         this.requestOptions = requestOptions;
 
         let response;
@@ -137,6 +163,7 @@ class Password extends eventEmitter {
                     });
 
                     res.on("end", function () {
+                        if (res.statusCode !== 200) reject(new TypeError(`Request finished with a status code of ${res.statusCode} but expected 200`));
                         var body = Buffer.concat(chunks);
                         resolve(body.toString());
                     });
@@ -186,6 +213,13 @@ class Password extends eventEmitter {
              * @param {number} howOftenBreached - The number of incidents that disclosed the password
              */
             this.emit("breached", howOftenBreached);
+        } else {
+            /**
+             * Emitted whenever the password was checked and NOT found in the database of HIBP
+             * 
+             * @event Password#safe
+             */
+            this.emit("safe");
         }
 
         return breached;
@@ -203,17 +237,13 @@ module.exports = {
 
 </div>
 
-<nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Password.html">Password</a></li></ul><h3>Events</h3><ul><li><a href="Password.html#event:breached">breached</a></li><li><a href="Password.html#event:checked">checked</a></li><li><a href="Password.html#event:ready">ready</a></li></ul>
-</nav>
-
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sat Mar 07 2020 00:27:44 GMT+0100 (GMT+01:00)
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Mar 07 2020 18:11:29 GMT+0100 (GMT+01:00) using the Minami theme.
 </footer>
 
-<script> prettyPrint(); </script>
-<script src="scripts/linenumber.js"> </script>
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
 </body>
 </html>

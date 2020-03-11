@@ -4,7 +4,8 @@
   "description": "Checks passwords for appearing in breaches using HaveIBeenPwned",
   "main": "app.js",
   "scripts": {
-    "test": "jest ."
+    "test": "jest .",
+    "doc": "jsdoc --readme README.md -c jsdoc.json"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,9 @@
     "follow-redirects": "^1.10.0"
   },
   "devDependencies": {
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "jsdoc": "^3.6.3",
+    "minami": "^1.2.3",
+    "tidy-jsdoc": "^1.2.2"
   }
 }

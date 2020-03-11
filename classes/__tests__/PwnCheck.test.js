@@ -1,5 +1,6 @@
 //Node Core Modules
 const path = require("path");
+const crypto = require("crypto");
 
 //Class that needs to be tested
 const PwnCheck = require(path.join(__dirname, "../PwnCheck.js"));
@@ -40,12 +41,17 @@ function objectHasSameValues(a, b) {
     return true;
 }
 
-//Testing is done with a very unsecure password that is obviously found in the database
-//Otherwise if using a strong password it may someday come up in the database and the test would then fail.
-//This means this test can only test the functionality of breached passwords!
-
+/**
+ * Password Class
+ */
 describe(`Password`, () => {
     let password;
+    let requestOptions = {
+        'method': 'GET',
+        'hostname': 'api.pwnedpasswords.com',
+        'path': `/range/5baa6`,
+        'maxRedirects': 20
+    };
 
     test(`Initialization`, async () => {
         try {
@@ -70,6 +76,12 @@ describe(`Password`, () => {
         expect(password.howOftenBreached).toBeUndefined();
     });
 
+    test(`Password must be defined`, () => {
+        expect(() => {
+            new PwnCheck.Password()
+        }).toThrow(new TypeError(`password must be defined and not null`));
+    });
+
     test(`Refuse to check if not ready`, async () => {
         password.ready = false;
         await expect(password.check()).rejects.toThrow("The Password has not been hashed yet");
@@ -79,26 +91,23 @@ describe(`Password`, () => {
     test(`Querying Database`, async () => {
         const checkedCalled = jest.fn();
         const breachedCalled = jest.fn();
+        const safeCalled = jest.fn();
 
         password.addListener("checked", checkedCalled);
         password.addListener("breached", breachedCalled);
+        password.addListener("safe", safeCalled);
 
         await expect(password.check()).resolves.toBe(true);
         expect(checkedCalled).toHaveBeenCalledTimes(1);
         expect(breachedCalled).toHaveBeenCalledTimes(1);
+        expect(safeCalled).not.toHaveBeenCalled();
 
         password.removeListener("checked", checkedCalled);
         password.removeListener("breached", breachedCalled);
+        password.removeListener("safe", safeCalled);
     });
 
     test(`Values after querying`, () => {
-        let requestOptions = {
-            'method': 'GET',
-            'hostname': 'api.pwnedpasswords.com',
-            'path': `/range/5baa6`,
-            'maxRedirects': 20
-        };
-
         expect(password.ready).toBe(true);
         expect(password.hash).toBe("5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
         expect(password.identifier).toBe("5baa6");
@@ -106,5 +115,51 @@ describe(`Password`, () => {
         expect(password.rawResponse).toBeDefined();
         expect(password.breached).toBe(true);
         expect(password.howOftenBreached).toBeGreaterThanOrEqual(3730471); //Number of breaches that disclosed the password as of 02/03/2020 (DD/MM/YYYY)
+    });
+
+    test(`Check with false override requestOptions should fallback to default requestOptions`, async () => {
+        await password.check("This is an incorrect value");
+        expect(objectHasSameValues(requestOptions, password.requestOptions)).toBe(true);
+    });
+
+    test(`Misconfigured requestOptions should throw an error`, async () => {
+        let faultyRequestOptions = {
+            'method': 'GET',
+            'hostname': 'api.pwnedpasswords.com',
+            'path': `/range/axz12`, //Not a valid hex formatted string
+            'maxRedirects': 20
+        };
+
+        await expect(password.check(faultyRequestOptions)).rejects.toThrow();
+    });
+
+    test(`Querying Database with a password that is not (likely to be) breached`, async () => {
+        let password2;
+        try {
+            await new Promise((resolve, reject) => {
+                password2 = new PwnCheck.Password(crypto.randomBytes(200).toString("hex"));
+                password2.once("ready", resolve);
+                setTimeout(reject, 15000);
+            });
+        } catch (error) {
+            throw new Error("Initialization timeout");
+        }
+
+        const safeCalled = jest.fn();
+        const checkedCalled = jest.fn();
+        const breachedCalled = jest.fn();
+
+        password2.addListener("safe", safeCalled);
+        password2.addListener("checked", checkedCalled);
+        password2.addListener("breached", breachedCalled);
+
+        await expect(password2.check()).resolves.toBe(false);
+        expect(checkedCalled).toHaveBeenCalledTimes(1);
+        expect(safeCalled).toHaveBeenCalledTimes(1);
+        expect(breachedCalled).not.toHaveBeenCalled();
+
+        password2.removeListener("safe", safeCalled);
+        password2.removeListener("checked", checkedCalled);
+        password2.removeListener("breached", breachedCalled);
     });
 });
