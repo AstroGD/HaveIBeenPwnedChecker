@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>updateCheck.js - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="Password.html">Password</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Password.html#check">check</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="Password.html#init">init</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="updateCheck.html">updateCheck</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="updateCheck.html#check">check</a></span></li><li class="nav-heading">Events</li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:breached">breached</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:checked">checked</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:ready">ready</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="Password.html#event:safe">safe</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="updateCheck.html#event:failed">failed</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="updateCheck.html#event:no-update-needed">no-update-needed</a></span></li><li class="nav-heading"><span class="nav-item-type type-event">E</span><span class="nav-item-name"><a href="updateCheck.html#event:update-needed">update-needed</a></span></li><li class="nav-heading"><a href="global.html">Globals</a></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">updateCheck.js</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const eventEmitter = require("events");
+const https = require('follow-redirects').https;
+const path = require("path");
+const packageFile = require(path.join(__dirname, "../package.json"));
+
+/**
+ * This class represents a check for Updates instance
+ * 
+ * @extends EventEmitter
+ */
+class updateCheck extends eventEmitter {
+    constructor() {
+        super();
+        this.check();
+    }
+
+    /**
+     * Checks for an update
+     * 
+     * @fires updateCheck#failed                    - Fires if there was an error checking for updates
+     * @fires updateCheck#no-update-needed          - Fires if the software is running the newest version
+     * @fires updateCheck#update-needed             - Fires if there is an update that needs to be installed
+     * @returns {void}
+     */
+    check() {
+        let requestOptions = {
+            'method': 'GET',
+            'hostname': 'software.astrogd.eu',
+            'path': `/haveibeenpwnedchecker/version.json`,
+            'maxRedirects': 20
+        };
+
+        function checkVersionGreater(base, check, allowEqual = false) {
+            let baseArr = base.toString().split(".");
+            let checkArr = check.toString().split(".");
+
+            if (baseArr.length !== 3 || checkArr.length !== 3) throw new TypeError("Invalid version style");
+
+            if (baseArr[0] &lt; checkArr[0]) return true;
+            if (baseArr[0] > checkArr[0]) return false;
+            if (baseArr[1] &lt; checkArr[1]) return true;
+            if (baseArr[1] > checkArr[1]) return false;
+            if (baseArr[2] &lt; checkArr[2]) return true;
+            if (baseArr[2] > checkArr[2]) return false;
+            if (allowEqual) return true;
+            else return false;
+        }
+
+        new Promise((resolve, reject) => {
+            const req = https.request(requestOptions, function (res) {
+                var chunks = [];
+
+                res.on("data", function (chunk) {
+                    chunks.push(chunk);
+                });
+
+                res.on("end", function () {
+                    if (res.statusCode !== 200) reject(new TypeError(`Request finished with a status code of ${res.statusCode} but expected 200`));
+                    var body = Buffer.concat(chunks);
+                    resolve(JSON.parse(body.toString()));
+                });
+
+                res.on("error", function (error) {
+                    reject(error);
+                });
+            });
+
+            req.end();
+
+            req.on("error", reject);
+        }).then((response) => {
+            if (!response.latest) return this.emit("failed");
+            /**
+             * Emitted whenever no update is needed
+             * 
+             * @event updateCheck#no-update-needed
+             */
+            if (!checkVersionGreater(packageFile.version, response.latest.version)) return this.emit("no-update-needed");
+
+            let updateTo;
+
+            if (!response[packageFile.version]) updateTo = response.latest;
+            else if (!response[packageFile.version].nextVersionOnUpdate) updateTo = response.latest;
+            else if (!response[response[packageFile.version].nextVersionOnUpdate]) updateTo = response.latest;
+            else updateTo = response[response[packageFile.version].nextVersionOnUpdate];
+
+            /**
+             * HTTP options for a request
+             * @typedef {object} updateResponse
+             * @property {string} url               - Url to the new version installer
+             * @property {string} signature         - Url to installers signature
+             * @property {string} version           - Version of the available update
+             */
+            const updateResponse = {
+                url: updateTo.url,
+                signature: updateTo.signature,
+                version: updateTo.version
+            };
+
+            /**
+             * Emitted whenever an update is available
+             * 
+             * @event updateCheck#update-needed
+             * @param {updateResponse}              - updateResponse Object with needed parameters to direct the user to the update files
+             */
+            return this.emit("update-needed", updateResponse);
+        }).catch(e => {
+            console.error(e);
+            /**
+             * Emitted whenever the check for updates failed
+             * 
+             * @event updateCheck#failed
+             */
+            this.emit("failed");
+        });
+    }
+}
+
+module.exports = updateCheck;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Thu Mar 12 2020 22:36:11 GMT+0100 (GMT+01:00) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

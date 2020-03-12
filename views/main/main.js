@@ -178,6 +178,29 @@ ipc.on("timeout", () => {
     }, 400);
 });
 
+ipc.on("update-available", async (_event, updateInformation) => {
+    const {value: signature} = await Swal.fire({
+        title: lang.update.title,
+        text: lang.update.text.split("{version}").join(updateInformation.version),
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        allowEnterKey: false,
+        input: "checkbox",
+        inputValue: 0,
+        inputPlaceholder: lang.update.signature,
+        icon: "info",
+        confirmButtonText: lang.update.confirm,
+        confirmButtonAriaLabel: lang.update.aria,
+        showCloseButton: false,
+        showCancelButton: false,
+    });
+
+    shell.openExternal(updateInformation.url);
+    if (signature) {
+        shell.openExternal(updateInformation.signature);
+    }
+});
+
 $(document).ready(() => {
     selector = {
         window: $(window),

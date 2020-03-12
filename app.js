@@ -5,8 +5,11 @@ const fs = require("fs-extra");
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 const ipc = electron.ipcMain;
+const dialog = electron.dialog;
+const shell = electron.shell;
 const package = require(path.join(__dirname, "/package.json"));
 const PwnCheck = require(path.join(__dirname, "/classes/PwnCheck.js"));
+const updateCheck = require(path.join(__dirname, "classes/updateCheck.js"));
 
 const language = {
     "en": require(path.join(__dirname, "/language/en.json")),
@@ -20,6 +23,22 @@ var win = {
 };
 var ready, userdata, config, langOptions;
 var count = 0;
+
+function checkVersionGreater(base, check, allowEqual = false) {
+    let baseArr = base.toString().split(".");
+    let checkArr = check.toString().split(".");
+
+    if (baseArr.length !== 3 || checkArr.length !== 3) throw new TypeError("Invalid version style");
+
+    if (baseArr[0] < checkArr[0]) return true;
+    if (baseArr[0] > checkArr[0]) return false;
+    if (baseArr[1] < checkArr[1]) return true;
+    if (baseArr[1] > checkArr[1]) return false;
+    if (baseArr[2] < checkArr[2]) return true;
+    if (baseArr[2] > checkArr[2]) return false;
+    if (allowEqual) return true;
+    else return false;
+}
 
 function init() {
     win.startup = new BrowserWindow({
@@ -82,7 +101,8 @@ async function load() {
     fs.ensureDirSync(userdata);
 
     const defaultConfig = {
-        lang: "en"
+        lang: "en",
+        version: package.version
     }
 
     if (!fs.existsSync(path.join(userdata, "/config.json"))) {
@@ -92,6 +112,27 @@ async function load() {
         config = require(path.join(userdata, "/config.json"));
     }
 
+    win.startup.setStatus(`[00${++count}] Checking version`, true);
+    if (checkVersionGreater(config.version, package.version)) {
+        //Run Update.js here if needed
+        config.version = package.version;
+        fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+    }
+
+    //This means an older version of HIBP Checker is running than the config was created for
+    if (checkVersionGreater(package.version, config.version)) {
+        dialog.showMessageBoxSync(win.startup, {
+            type: "error",
+            buttons: ["Ok"],
+            title: "Error",
+            message: "Your running an older version of HaveIBeenPwned Checker",
+            detail: "The config shows you have been running a newer version of HaveIBeenPwned Checker. Opening the config with an older version can corrupt the data or crash the program in unexpected ways. The programm will not start. Please download the newest version of HaveIBeenPwned Checker."
+        });
+        shell.openExternal("https://www.astrogd.eu/software/haveibeenpwned-checker");
+        return app.quit();
+    }
+
+    win.startup.setStatus(`[00${++count}] Checking language`, true);
     if (!language[config.lang]) {
         config.lang = "en";
         fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
@@ -133,6 +174,12 @@ async function load() {
         win.main.show();
         win.startup.destroy();
         win.startup = undefined;
+
+        const update = new updateCheck();
+
+        update.on("update-needed", (response) => {
+            win.main.sender.send("update-available", response);
+        });
     });
 
     ipc.on("loaded", (event) => {

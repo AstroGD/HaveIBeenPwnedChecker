@@ -33,5 +33,12 @@
     "buttons": {
         "ok": "Ok",
         "cancel": "Abbrechen"
+    },
+    "update": {
+        "title": "Ein Update ist verfügbar",
+        "text": "Ein Update zu Version {version} ist verfügbar.\nMit dem klicken auf \"Herunterladen\" wirst du zum Herunterladen der neuen Version geleitet.",
+        "signature": "Signatur des Installers herunterladen",
+        "confirm": "Herunterladen",
+        "aria": "herunterladen"
     }
 }

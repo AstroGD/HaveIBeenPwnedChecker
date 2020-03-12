@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Global - Documentation</title>
+    <title>updateCheck - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">updateCheck</h1>
     
 
     
@@ -42,8 +42,10 @@
 <header>
     
         <h2>
-        
+        updateCheck
         </h2>
+        
+            <div class="class-description"><p>This class represents a check for Updates instance</p></div>
         
     
 </header>
@@ -52,8 +54,20 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="updateCheck"><span class="type-signature"></span>new updateCheck<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
 
 
 <dl class="details">
@@ -83,6 +97,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
 
     
 
@@ -92,9 +111,41 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
     
     </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>EventEmitter</li>
+    </ul>
+
 
     
 
@@ -109,153 +160,26 @@
     
 
     
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Methods</h3>
 
         
-                
-<div class="section-members">
-<h4 class="name" id="requestOptions">requestOptions</h4>
+            
+<div class="section-method">
 
+    
 
-<p class="summary"><p>HTTP options for a request</p>.</p>
+    <h4 class="name" id="check"><span class="type-signature"></span>check<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+
+    
+    <p class="summary"><p>Checks for an update</p>.</p>
+    
 
 
 
 <div class="description">
-    <p>HTTP options for a request</p>
+    <p>Checks for an update</p>
 </div>
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>method</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>HTTP Method to be used for the request</p></td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>hostname</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Hostname that will be requested (example.org NOT example.org/bla/blablubb)</p></td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>path</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Path on the host that will be requested (/bla/blablubb NOT example.org/bla/blablubb or example.org)</p></td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>maxRedirects</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Max redirects allowed before the request fails and throws an error</p></td>
-        </tr>
-
-        
-
-    
-    </tbody>
-</table>
 
 
 
@@ -289,7 +213,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="PwnCheck.js.html">PwnCheck.js</a>, <a href="PwnCheck.js.html#line95">line 95</a>
+        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line25">line 25</a>
     </li></ul></dd>
     
 
@@ -302,140 +226,83 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>object</code></span>
 
 
-        </li>
-    </ul>
 
 
+
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li>updateCheck#event:failed                    - Fires if there was an error checking for updates</li>
+
+    <li>updateCheck#event:no-update-needed          - Fires if the software is running the newest version</li>
+
+    <li>updateCheck#event:update-needed             - Fires if there is an update that needs to be installed</li>
+</ul>
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>void</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
 
 
 
 </div>
+        
+    
 
+    
+
+    
+        <h3 class="subsection-title">Events</h3>
+
+        
             
-                
-<div class="section-members">
-<h4 class="name" id="updateResponse">updateResponse</h4>
+<div class="section-method">
 
+    
 
-<p class="summary"><p>HTTP options for a request</p>.</p>
+    <h4 class="name" id="event:failed">failed</h4>
+
+    
+    <p class="summary"><p>Emitted whenever the check for updates failed</p>.</p>
+    
 
 
 
 <div class="description">
-    <p>HTTP options for a request</p>
+    <p>Emitted whenever the check for updates failed</p>
 </div>
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>url</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Url to the new version installer</p></td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>signature</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Url to installers signature</p></td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>version</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>Version of the available update</p></td>
-        </tr>
-
-        
-
-    
-    </tbody>
-</table>
 
 
 
@@ -469,7 +336,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line87">line 87</a>
+        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -482,25 +349,246 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>object</code></span>
 
 
-        </li>
-    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 </div>
-
+        
             
+<div class="section-method">
+
     
 
+    <h4 class="name" id="event:no-update-needed">no-update-needed</h4>
+
+    
+    <p class="summary"><p>Emitted whenever no update is needed</p>.</p>
+    
+
+
+
+<div class="description">
+    <p>Emitted whenever no update is needed</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="event:update-needed">update-needed</h4>
+
+    
+    <p class="summary"><p>Emitted whenever an update is available</p>.</p>
+    
+
+
+
+<div class="description">
+    <p>Emitted whenever an update is available</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="updateCheck.js.html">updateCheck.js</a>, <a href="updateCheck.js.html#line100">line 100</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="global.html#updateResponse">updateResponse</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>updateResponse Object with needed parameters to direct the user to the update files</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
     
 </article>
 
