@@ -44,13 +44,13 @@ function init() {
 
     win.startup.once("ready-to-show", () => {
         win.startup.show();
-        if (ready) setTimeout(load, 2000);
+        if (ready) load();
         ready = true;
     });
 
     ipc.once("ready", (event, _args) => {
         win.startup.sender = event.sender;
-        if (ready) setTimeout(load, 2000);
+        if (ready) load();
         ready = true;
     });
 

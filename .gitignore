@@ -1,3 +1,7 @@
+# Binaries
+bin
+build
+
 # Logs
 logs
 *.log
