@@ -1,5 +1,6 @@
 const electron = require("electron");
 const path = require("path");
+const fs = require("fs-extra");
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -7,11 +8,17 @@ const ipc = electron.ipcMain;
 const package = require(path.join(__dirname, "/package.json"));
 const PwnCheck = require(path.join(__dirname, "/classes/PwnCheck.js"));
 
+const language = {
+    "en": require(path.join(__dirname, "/language/en.json")),
+    "de-formal": require(path.join(__dirname, "/language/de_formal.json")),
+    "de-informal": require(path.join(__dirname, "/language/de_informal.json"))
+}
+
 var win = {
     main: undefined,
     startup: undefined
 };
-var ready;
+var ready, userdata, config, langOptions;
 var count = 0;
 
 function init() {
@@ -31,7 +38,8 @@ function init() {
         webPreferences: {
             nodeIntegration: true,
             devTools: false
-        }
+        },
+        icon: path.join(__dirname, "/icon.png")
     });
 
     win.startup.once("ready-to-show", () => {
@@ -69,6 +77,33 @@ function init() {
 
 async function load() {
     win.startup.setVersion(package.version);
+    win.startup.setStatus(`[00${++count}] Loading config`, true);
+    userdata = app.getPath('userData');
+    fs.ensureDirSync(userdata);
+
+    const defaultConfig = {
+        lang: "en"
+    }
+
+    if (!fs.existsSync(path.join(userdata, "/config.json"))) {
+        fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(defaultConfig));
+        config = defaultConfig;
+    } else {
+        config = require(path.join(userdata, "/config.json"));
+    }
+
+    if (!language[config.lang]) {
+        config.lang = "en";
+        fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+    }
+
+    win.startup.setStatus(`[00${++count}] Preparing content`, true);
+    langOptions = "";
+    let availableLanguages = Object.keys(language);
+    for (let i = 0; i < availableLanguages.length; i++) {
+        const langID = availableLanguages[i];
+        langOptions = langOptions + `<option value="${langID}">${language[langID].lang}</option>`;
+    }
 
     win.startup.setStatus(`[00${++count}] Preparing view`, true);
 
@@ -90,7 +125,8 @@ async function load() {
         webPreferences: {
             nodeIntegration: true,
             devTools: false
-        }
+        },
+        icon: path.join(__dirname, "/icon.png")
     });
 
     ipc.once("ready", () => {
@@ -99,9 +135,13 @@ async function load() {
         win.startup = undefined;
     });
 
-    ipc.once("loaded", (event) => {
-        win.main.sender = event.sender;
-        win.main.sender.send("version", package.version);
+    ipc.on("loaded", (event) => {
+        if (!win.main.sender) win.main.sender = event.sender;
+        win.main.sender.send("content", {
+            version: package.version,
+            lang: language[config.lang],
+            langOptions: langOptions
+        });
     });
 
     ipc.on("minimize", () => {
@@ -116,6 +156,16 @@ async function load() {
     ipc.on("close", () => {
         win.main.close();
         app.quit();
+    });
+
+    ipc.on("switchLang", (_event, lang) => {
+        if (language[lang]) {
+            config.lang = lang;
+            fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+            win.main.sender.send("languageFile", language[lang]);
+        } else {
+            win.main.sender.send("languageFile", false);
+        }
     });
 
     ipc.on("check", async (_event, password) => {

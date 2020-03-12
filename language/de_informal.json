@@ -1,0 +1,37 @@
+{
+    "lang": "Deutsch (persönlich)",
+    "status": {
+        "danger": {
+            "title": "Oh Nein!",
+            "text": "Es sieht so aus, als wäre dein Passwort in der Datenbank von HaveIBeenPwned gefunden worden!",
+            "footer": "Was soll ich jetzt tun?",
+            "confirm": "Ich weiß was zu tun ist!",
+            "aria": "bestätigen"
+        },
+        "timeout": {
+            "title": "Ups!",
+            "text": "Es tut mir leid, aber die Bearbeitung der Anfrage hat zu lange gedauert.\nBitte prüfe deine Internetverbindung und Antiviren-Software oder kontaktiere meinen Entwickler:\n\nsupport@astrogd.eu"
+        }
+    },
+    "window": {
+        "title": "Passwort mit HIBP überprüfen",
+        "language": "Sprache",
+        "password": "Passwort",
+        "copyrightPre": "Mit",
+        "copyrightPost": "entwickelt von"
+    },
+    "switchLanguage": {
+        "title": "Sprache wechseln",
+        "text": "Sprache auswählen",
+        "error": {
+            "timeout": "Etwas hat zu lange gedauert",
+            "unknownLang": "Unbekannte Sprache",
+            "info": "Deine Sprache konnte nicht geändert werden"
+        },
+        "success": "Deine Sprache wurde gespeichert"
+    },
+    "buttons": {
+        "ok": "Ok",
+        "cancel": "Abbrechen"
+    }
+}

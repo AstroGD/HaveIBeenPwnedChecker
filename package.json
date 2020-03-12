@@ -19,7 +19,8 @@
   },
   "homepage": "https://gitlab.com/AstroGD/haveibeenpwnedchecker#readme",
   "dependencies": {
-    "follow-redirects": "^1.10.0"
+    "follow-redirects": "^1.10.0",
+    "fs-extra": "^8.1.0"
   },
   "devDependencies": {
     "electron": "^8.1.1",

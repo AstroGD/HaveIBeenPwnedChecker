@@ -1,33 +1,17 @@
 const ipc = require("electron").ipcRenderer;
+const shell = require("electron").shell;
 
 var dark = true;
 var ready = false;
 var blocked;
 var width;
 var selector;
+var lang;
+var langOptions = "";
 
 const iconSearch = '"\\f002"';
 const iconCheck = '"\\f00c"';
 const iconAlert = '"\\f071"';
-
-function toggleTheme() {
-    return;
-    if (dark) {
-        document.documentElement.style.setProperty("--background-color", "#fff");
-        document.documentElement.style.setProperty("--switch-icon", '"\\f186"');
-        document.documentElement.style.setProperty("--font-color", "rgb(50, 50, 50)");
-        document.documentElement.style.setProperty("--complementary", "rgb(50, 50, 50)");
-        document.documentElement.style.setProperty("--complementary-font", "#fff");
-        dark = false;
-    } else {
-        document.documentElement.style.removeProperty("--background-color");
-        document.documentElement.style.removeProperty("--switch-icon");
-        document.documentElement.style.removeProperty("--font-color");
-        document.documentElement.style.removeProperty("--complementary");
-        document.documentElement.style.removeProperty("--complementary-font");
-        dark = true;
-    }
-}
 
 function recalcWidth() {
     window.requestAnimationFrame(() => {
@@ -68,6 +52,11 @@ function checkPassword() {
     ipc.send("check", selector.password.val());
 }
 
+function helpMe() {
+    shell.openExternal("https://www.astrogd.eu/software/haveibeenpwned-checker/mein-passwort-existiert-in-der-datenbank");
+    updateLang();
+}
+
 function statusDanger() {
     selector.body.addClass("danger");
     selector.statusCircle.addClass("danger");
@@ -76,11 +65,13 @@ function statusDanger() {
     selector.password.attr("readonly", false);
     selector.password.focus();
     blocked = false;
-    swal({
-        title: "Oh No!",
-        buttons: ["More", "I know what to do"],
-        text: "It looks like your password has beend found in the database of HaveIBeenPwned!\n\nClick on 'More' if you want to know what you should do next.",
-        icon: "error"
+    Swal.fire({
+        title: lang.status.danger.title,
+        text: lang.status.danger.text,
+        icon: "error",
+        footer: `<a href onclick="helpMe()">${lang.status.danger.footer}</a>`,
+        confirmButtonText: lang.status.danger.confirm,
+        confirmButtonAriaLabel: lang.status.danger.aria,
     });
 }
 
@@ -90,9 +81,63 @@ function statusNoWorries() {
     document.documentElement.style.setProperty("--status-icon", iconCheck);
 }
 
-ipc.once("version", (_event, version) => {
+function switchLanguage() {
+    Swal.fire({
+        showCloseButton: true,
+        showCancelButton: true,
+        confirmButtonText: lang.buttons.ok,
+        cancelButtonText: lang.buttons.cancel,
+        title: lang.switchLanguage.title,
+        html: `<div class="my-3"><select class="custom-select" id="inputLanguage"><option selected>${lang.switchLanguage.text}</option>${langOptions}</select></div>`,
+        showLoaderOnConfirm: true,
+        preConfirm: () => {
+            return new Promise((resolve, reject) => {
+                let timeout = setTimeout(() => {
+                    reject(lang.switchLanguage.error.timeout);
+                }, 5000);
+                let val = $("#inputLanguage").val();
+                if (!val) return resolve(true);
+                ipc.send("switchLang", val);
+
+                ipc.once("languageFile", (_event, language) => {
+                    if (!language) return (reject(lang.switchLanguage.error.unknownLang));
+                    lang = language;
+                    updateLang();
+                    clearTimeout(timeout);
+                    resolve(true);
+                });
+            }).catch((message) => {
+                Swal.showValidationMessage(
+                    `${lang.switchLanguage.error.info}: ${message}`
+                );
+            });
+        }
+    }).then((result) => {
+        if (!result.value) return;
+        Swal.fire({
+            icon: 'success',
+            title: lang.switchLanguage.success,
+            showConfirmButton: false,
+            timer: 1500
+        });
+    });
+}
+
+function updateLang() {
+    if (!lang) return;
+    selector.lang.title.html(lang.window.title);
+    selector.lang.language.html(lang.window.language);
+    selector.lang.password.html(lang.window.password);
+    selector.lang.copyrightPre.html(lang.window.copyrightPre);
+    selector.lang.copyrightPost.html(lang.window.copyrightPost);
+}
+
+ipc.once("content", (_event, content) => {
     window.requestAnimationFrame(() => {
-        selector.version.html(`V ${version}`);
+        selector.version.html(`V ${content.version}`);
+        lang = content.lang;
+        langOptions = content.langOptions;
+        updateLang();
         ipc.send("ready");
     });
 });
@@ -124,9 +169,9 @@ ipc.on("timeout", () => {
         selector.password.attr("readonly", false);
         selector.password.focus();
         blocked = false;
-        swal({
-            title: "Whoops!",
-            text: "I'm sorry, but the request took too long to process.\nPlease check your internet connection and antivirus software or contact my developer:\n\nsupport@astrogd.eu",
+        Swal.fire({
+            title: lang.status.timeout.title,
+            text: lang.status.timeout.text,
             icon: "warning"
         });
         checkInput();
@@ -144,7 +189,14 @@ $(document).ready(() => {
         minimize: $("#minimize"),
         maximize: $("#maximize"),
         close: $("#close"),
-        version: $("#version")
+        version: $("#version"),
+        lang: {
+            title: $("#langTitle"),
+            language: $("#langLanguage"),
+            password: $("#langPassword"),
+            copyrightPre: $("#langCopyrightPre"),
+            copyrightPost: $("#langCopyrightPost")
+        }
     };
 
     width = selector.window.width();

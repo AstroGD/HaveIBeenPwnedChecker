@@ -12,13 +12,6 @@ body {
     transition: color 0.3s;
     transition: background-color 0.3s;
 
-    /*>#toggleTheme {
-        position: fixed;
-        top: 0;
-        right: 0;
-        margin: 20px;
-    }*/
-
     #windowbar {
         -webkit-app-region: drag;
         height: 30px;
@@ -70,35 +63,39 @@ body {
         z-index: 10;
         color: $bright;
         background-color: $dark;
+        height: 90vh;
+        display: flex;
+        align-items: center;
 
-        >div.status {
-            width: 30vw;
-            height: 30vw;
-            max-width: 300px;
-            max-height: 300px;
-            min-width: 200px;
-            min-height: 200px;
-            background-color: $bright;
-            border-radius: 100%;
-            margin-top: 100px;
-            color: $dark;
-            display: flex;
-            align-items: center;
-            transition: transform 0.3s;
-            transition: background-color 0.3s;
-            transition: color 0.3s;
+        >div {
+            margin-left: auto;
+            margin-right: auto;
 
-            &.ready {
-                cursor: pointer;
-                animation-name: statusReady;
-                animation-duration: 0.5s;
-                animation-direction: alternate;
-                animation-iteration-count: infinite;
+            >div.status {
+                width: 200px;
+                height: 200px;
+                background-color: $bright;
+                border-radius: 100%;
+                margin-top: 100px;
+                color: $dark;
+                display: flex;
+                align-items: center;
+                transition: transform 0.3s;
+                transition: background-color 0.3s;
+                transition: color 0.3s;
 
-                &:hover {
-                    transform: scale(1.1) !important;
-                    animation-duration: 1s;
-                    animation-name: statusReadyHover;
+                &.ready {
+                    cursor: pointer;
+                    animation-name: statusReady;
+                    animation-duration: 0.5s;
+                    animation-direction: alternate;
+                    animation-iteration-count: infinite;
+
+                    &:hover {
+                        transform: scale(1.1) !important;
+                        animation-duration: 1s;
+                        animation-name: statusReadyHover;
+                    }
                 }
             }
         }
@@ -125,15 +122,11 @@ body {
     }
 }
 
-/*button.btn.primary {
-    background-color: var(--complementary);
-    color: var(--complementary-font);
+button.btn.primary {
+    background-color: $bright;
+    color: $dark;
 }
 
-i.fas.themeSwitch:before {
-    content: var(--switch-icon);
-}
-*/
 i.fas.statusIcon:before {
     content: var(--status-icon);
 }

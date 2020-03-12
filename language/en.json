@@ -1,0 +1,37 @@
+{
+    "lang": "English",
+    "status": {
+        "danger": {
+            "title": "Oh No!",
+            "text": "It looks like your password has been found in the database of HaveIBeenPwned!",
+            "footer": "What should I do now?",
+            "confirm": "I know what to do",
+            "aria": "confirm"
+        },
+        "timeout": {
+            "title": "Whoops!",
+            "text": "I'm sorry, but the request took too long to process.\nPlease check your internet connection and antivirus software or contact my developer:\n\nsupport@astrogd.eu"
+        }
+    },
+    "window": {
+        "title": "Check your password against HIBPs database",
+        "language": "Language",
+        "password": "Password",
+        "copyrightPre": "Made with",
+        "copyrightPost": "by"
+    },
+    "switchLanguage": {
+        "title": "Switch language",
+        "text": "Choose a language",
+        "error": {
+            "timeout": "Something took too long",
+            "unknownLang": "Unknown language",
+            "info": "Your language couldn't be changed"
+        },
+        "success": "Your language preference has been saved"
+    },
+    "buttons": {
+        "ok": "Ok",
+        "cancel": "Cancel"
+    }
+}
