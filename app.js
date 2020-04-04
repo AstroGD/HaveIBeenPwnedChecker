@@ -1,6 +1,7 @@
 const electron = require("electron");
 const path = require("path");
 const fs = require("fs-extra");
+const childProcess = require("child_process");
 
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -102,7 +103,8 @@ async function load() {
 
     const defaultConfig = {
         lang: "en",
-        version: package.version
+        version: package.version,
+        changelogShown: true
     }
 
     if (!fs.existsSync(path.join(userdata, "/config.json"))) {
@@ -113,10 +115,35 @@ async function load() {
     }
 
     win.startup.setStatus(`[00${++count}] Checking version`, true);
+
     if (checkVersionGreater(config.version, package.version)) {
-        //Run Update.js here if needed
-        config.version = package.version;
-        fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+        win.startup.setStatus(`[00${++count}] Finishing Update to newer version`, true);
+
+        if (fs.existsSync(path.join(__dirname, "/update.js"))) {
+            const Updater = require(path.join(__dirname, "/update.js"));
+            try {
+                await Updater(path.join(userdata, "/config.json"), config);
+            } catch (error) {
+                fs.writeFileSync(path.join(userdata, "/update-error.log"), error.stack);
+                dialog.showMessageBoxSync(win.startup, {
+                    type: "error",
+                    buttons: ["Ok"],
+                    title: "Error",
+                    message: "We were unable to update your config to the newest version",
+                    detail: `You can try to delete ${path.join(userdata, "/config.json")}, but this will delete your preferences. Otherwise delete the file, uninstall and reinstall the program and try again. If this isn't helping either, please contact support@astrogd.eu.\n\nAn error log has been created in ${path.join(userdata, "/update-error.log")}`
+                });
+                app.exit();
+                return;
+            }
+
+            app.relaunch();
+            app.exit();
+
+            return;
+        } else {
+            config.version = package.version;
+            fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+        }
     }
 
     //This means an older version of HIBP Checker is running than the config was created for
@@ -129,7 +156,9 @@ async function load() {
             detail: "The config shows you have been running a newer version of HaveIBeenPwned Checker. Opening the config with an older version can corrupt the data or crash the program in unexpected ways. The programm will not start. Please download the newest version of HaveIBeenPwned Checker."
         });
         shell.openExternal("https://www.astrogd.eu/software/haveibeenpwned-checker");
-        return app.quit();
+        win.startup.close();
+        app.exit();
+        return;
     }
 
     win.startup.setStatus(`[00${++count}] Checking language`, true);
@@ -170,7 +199,7 @@ async function load() {
         icon: path.join(__dirname, "/icon.png")
     });
 
-    ipc.once("ready", () => {
+    ipc.once("ready", () => {        
         win.main.show();
         win.startup.destroy();
         win.startup = undefined;
@@ -187,8 +216,15 @@ async function load() {
         win.main.sender.send("content", {
             version: package.version,
             lang: language[config.lang],
-            langOptions: langOptions
+            langCode: config.lang,
+            langOptions: langOptions,
+            showChangelog: config.changelogShown ? false : true
         });
+
+        if (!config.changelogShown) {
+            config.changelogShown = true;
+            fs.writeFileSync(path.join(userdata, "/config.json"), JSON.stringify(config));
+        }
     });
 
     ipc.on("minimize", () => {

@@ -133,12 +133,34 @@ function updateLang() {
 }
 
 ipc.once("content", (_event, content) => {
-    window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(async () => {
         selector.version.html(`V ${content.version}`);
         lang = content.lang;
         langOptions = content.langOptions;
         updateLang();
         ipc.send("ready");
+        if (content.showChangelog) {
+            const { value: changelog } = await Swal.fire({
+                title: lang.changelog.title,
+                text: lang.changelog.text.split("{version}").join(content.version),
+                input: "checkbox",
+                inputValue: 0,
+                inputPlaceholder: lang.changelog.changelog,
+                icon: "info",
+                confirmButtonText: lang.changelog.confirm,
+                confirmButtonAriaLabel: lang.changelog.aria,
+                showCloseButton: false,
+                showCancelButton: false
+            });
+
+            if (changelog) {
+                if (content.langCode.includes == "de") {
+                    shell.openExternal("https://www.astrogd.eu/software/haveibeenpwned-checker/changelog/");
+                } else {
+                    shell.openExternal("https://www.astrogd.eu/en/software/haveibeenpwned-checker/changelog/");
+                }
+            }
+        }
     });
 });
 

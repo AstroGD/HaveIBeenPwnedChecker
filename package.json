@@ -1,6 +1,6 @@
 {
   "name": "haveibeenpwnedchecker",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Checks passwords for appearing in breaches using HaveIBeenPwned",
   "main": "app.js",
   "scripts": {
@@ -20,15 +20,15 @@
   },
   "homepage": "https://gitlab.com/AstroGD/haveibeenpwnedchecker#readme",
   "dependencies": {
-    "follow-redirects": "^1.10.0",
-    "fs-extra": "^8.1.0"
+    "follow-redirects": "^1.11.0",
+    "fs-extra": "^9.0.0"
   },
   "devDependencies": {
-    "electron": "^8.1.1",
+    "electron": "^8.2.0",
     "electron-packager": "^14.2.1",
-    "jest": "^25.1.0",
+    "jest": "^25.2.7",
     "jsdoc": "^3.6.3",
     "minami": "^1.2.3",
-    "tidy-jsdoc": "^1.2.2"
+    "tidy-jsdoc": "^1.4.0"
   }
 }

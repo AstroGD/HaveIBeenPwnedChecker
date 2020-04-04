@@ -5,7 +5,7 @@
             "title": "Oh No!",
             "text": "It looks like your password has been found in the database of HaveIBeenPwned!",
             "footer": "What should I do now?",
-            "confirm": "I know what to do",
+            "confirm": "Okay",
             "aria": "confirm"
         },
         "timeout": {
@@ -40,5 +40,12 @@
         "signature": "Download signature of installer",
         "confirm": "Download",
         "aria": "download"
+    },
+    "changelog": {
+        "title": "Update finished",
+        "text": "Thank you for updating to version {version}! If you want, you can view all changes now.",
+        "changelog": "Open Changelog",
+        "confirm": "Okay",
+        "aria": "okay"
     }
 }
