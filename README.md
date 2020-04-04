@@ -1,9 +1,11 @@
 # HaveIBeenPwnedChecker
 A tool to check your passwords for being leaked on [HaveIBeenPwned.com](https://www.haveibeenpwned.com)
 
-[Download, Screenshots and more information (German)](https://www.astrogd.eu/software/haveibeenpwned-checker)
+[Download, Screenshots and more information](https://www.astrogd.eu/software/haveibeenpwned-checker)
 
-[Download V 1.0.0 (English & German)](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.0.0.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.0.0.exe.sig)
+[Download V 1.1.0](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.1.0.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.1.0.exe.sig)
+
+[Download V 1.0.0](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.0.0.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.0.0.exe.sig)
 
 ## How to create your own binary
 - Download Repository, install [NodeJS](https://www.nodejs.org) and run `npm install`
