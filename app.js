@@ -209,6 +209,13 @@ async function load() {
         update.on("update-needed", (response) => {
             win.main.sender.send("update-available", response);
         });
+
+        //Retry search for updates after 30 seconds if it has failed
+        update.on("failed", () => {
+            setTimeout(() => {
+                update.check();
+            }, 30000);
+        });
     });
 
     ipc.on("loaded", (event) => {

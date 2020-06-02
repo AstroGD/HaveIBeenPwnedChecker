@@ -1,6 +1,6 @@
 {
   "name": "haveibeenpwnedchecker",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Checks passwords for appearing in breaches using HaveIBeenPwned",
   "main": "app.js",
   "scripts": {
@@ -24,9 +24,9 @@
     "fs-extra": "^9.0.0"
   },
   "devDependencies": {
-    "electron": "^8.2.5",
+    "electron": "^9.0.1",
     "electron-packager": "^14.2.1",
-    "jest": "^25.5.3",
+    "jest": "^26.0.1",
     "jsdoc": "^3.6.4",
     "minami": "^1.2.3",
     "tidy-jsdoc": "^1.4.0"

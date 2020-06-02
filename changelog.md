@@ -1,5 +1,17 @@
+# V1.2.0
+#### Release: 06.05.2020
+
+## New
+* If the updater fails to check if a newer update is available, it will repeat to check every 30 seconds until success
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - electron from 8.2.5 to 9.0.1
+    - jest from 25.5.3 to 26.0.1
+
 # V1.1.1
-#### Release; 01.05.2020
+#### Release: 01.05.2020
 
 ## Updates
 * Updated dependencies to the newest version. This is part of the monthly security update.
@@ -9,7 +21,7 @@
     - jsdoc from 3.6.3 to 3.6.4
 
 # V 1.1.0
-#### Released:  04.04.2020
+#### Release:  04.04.2020
 
 ## New
 * Added Updater to automatically update the config from an older version.
@@ -31,7 +43,7 @@
     - fs-extra from 8.1.0 to 9.0.0
 
 # V 1.0.0
-#### Released: 12.03.2020
+#### Release: 12.03.2020
 
 ## New
 * Check password: Enter your password in the input field and press "Enter" to verify your password in HaveIBeenPwned's database.
