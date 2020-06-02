@@ -20,7 +20,8 @@ const options = {
         CompanyName: "AstroGD Lukas Weber",
         FileDescription: "A tool to check if a password was part of a leak",
         ProductName: "HaveIBeenPwned Checker"
-    }
+    },
+    overwrite: true
 }
 
 bundleElectronApp(options);
