@@ -7,8 +7,9 @@
 ## Updates
 * Updated dependencies to the newest version. This is part of the monthly security update.
   Updated packages:
-    - electron from 8.2.5 to 9.0.1
+    - electron from 8.2.5 to 9.0.2
     - jest from 25.5.3 to 26.0.1
+    - fs-extra from 9.0.0 to 9.0.1
 
 # V1.1.1
 #### Release: 01.05.2020
