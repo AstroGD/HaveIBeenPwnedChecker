@@ -1,9 +1,13 @@
 const packager = require('electron-packager');
 const path = require("path");
+const fs = require("fs");
 
 async function bundleElectronApp(options) {
     const appPaths = await packager(options)
     console.log(`Electron app bundles created:\n${appPaths.join("\n")}`);
+    fs.renameSync(path.join(__dirname, "../bin/HaveIBeenPwned Checker-win32-x64/LICENSE"), path.join(__dirname, "../bin/HaveIBeenPwned Checker-win32-x64/LICENSE.github"));
+    fs.copyFileSync(path.join(__dirname, "../bin/LICENSE"), path.join(__dirname, "../bin/HaveIBeenPwned Checker-win32-x64/LICENSE"));
+    console.log(`LICENSE files updated`);
 }
 
 const options = {
