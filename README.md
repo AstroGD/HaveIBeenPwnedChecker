@@ -3,6 +3,8 @@ A tool to check your passwords for being leaked on [HaveIBeenPwned.com](https://
 
 [Download, Screenshots and more information](https://www.astrogd.eu/software/haveibeenpwned-checker)
 
+[Download V 1.3.0](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.3.0.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.3.0.exe.sig)
+
 [Download V 1.2.0](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.2.0.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.2.0.exe.sig)
 
 [Download V 1.1.1](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.1.1.exe) | [Signature](https://software.astrogd.eu/haveibeenpwnedchecker/download/HaveIBeenPwnedCheckerV1.1.1.exe.sig)

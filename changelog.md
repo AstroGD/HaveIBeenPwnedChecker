@@ -1,3 +1,17 @@
+# V1.3.0
+#### Release: 11.07.2020
+
+## New
+* When building the License file will be automattically adjusted to the projects License
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - follow-redirects from 1.11.0 to 1.12.1
+    - electron from 9.0.2 to 9.1.0
+    - electron-packager from 14.2.1 to 15.0.0
+    - jest from 26.0.1 to 26.1.0
+
 # V1.2.0
 #### Release: 06.05.2020
 
