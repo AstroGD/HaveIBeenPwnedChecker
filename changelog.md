@@ -1,3 +1,13 @@
+# V1.3.1
+#### Release: 03.08.2020
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - electron from 9.1.0 to 9.1.2
+    - jest from 26.1.0 to 26.2.2
+    - jsdoc from 3.6.4 to 3.6.5
+
 # V1.3.0
 #### Release: 11.07.2020
 
