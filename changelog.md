@@ -1,3 +1,13 @@
+# V1.3.2
+#### Release: 20.08.2020
+
+## Updates
+* Updated dependencies to the newest version. This is a hotfix as a result of a high severity vulnerability in Electron < 9.2.1.
+  Updated packages:
+    - electron from 9.1.2 to 9.2.1
+    - follow-redirects from 1.12.1 to 1.13.0
+    - jest from 26.2.2 to 26.4.1
+
 # V1.3.1
 #### Release: 03.08.2020
 
