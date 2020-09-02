@@ -1,4 +1,14 @@
 # V1.3.2
+#### Release: 02.09.2020
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - electron from 9.2.1 to 10.1.1
+    - electron-packager from 15.0.0 to 15.1.0
+    - jest from 26.4.1 to 26.4.2
+
+# V1.3.2
 #### Release: 20.08.2020
 
 ## Updates
