@@ -1,4 +1,13 @@
-# V1.3.2
+# V1.3.4
+#### Release: 01.10.2020
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - electron from 10.1.1 to 10.1.3
+    - jsdoc from 3.6.5 to 3.6.6
+
+# V1.3.3
 #### Release: 02.09.2020
 
 ## Updates
