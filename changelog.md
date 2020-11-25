@@ -1,3 +1,15 @@
+# V1.4.0
+#### Release: 25.11.2020
+
+## New
+* Removed unnecessary files to speed up installation and reduce required space
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - electron from 10.1.3 to 11.0.3
+    - jest from 26.4.2 to 26.6.3
+
 # V1.3.4
 #### Release: 01.10.2020
 
