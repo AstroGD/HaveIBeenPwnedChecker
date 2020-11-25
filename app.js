@@ -57,7 +57,8 @@ function init() {
         darkTheme: true,
         webPreferences: {
             nodeIntegration: true,
-            devTools: false
+            devTools: false,
+            contextIsolation: false
         },
         icon: path.join(__dirname, "/icon.png")
     });
@@ -194,7 +195,8 @@ async function load() {
         darkTheme: true,
         webPreferences: {
             nodeIntegration: true,
-            devTools: false
+            devTools: false,
+            contextIsolation: false
         },
         icon: path.join(__dirname, "/icon.png")
     });
