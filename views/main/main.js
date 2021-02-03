@@ -8,6 +8,7 @@ var width;
 var selector;
 var lang;
 var langOptions = "";
+var bgTimeout = null;
 
 const iconSearch = '"\\f002"';
 const iconCheck = '"\\f00c"';
@@ -57,6 +58,16 @@ function helpMe() {
     updateLang();
 }
 
+function setBGReset() {
+    if (bgTimeout) clearTimeout(bgTimeout);
+
+    bgTimeout = setTimeout(() => {
+        selector.body.removeClass("danger");
+        selector.body.removeClass("success");
+        bgTimeout = null;
+    }, 1000);
+}
+
 function statusDanger() {
     selector.body.addClass("danger");
     selector.statusCircle.addClass("danger");
@@ -65,6 +76,9 @@ function statusDanger() {
     selector.password.attr("readonly", false);
     selector.password.focus();
     blocked = false;
+
+    setBGReset();
+
     Swal.fire({
         title: lang.status.danger.title,
         text: lang.status.danger.text,
@@ -79,6 +93,8 @@ function statusNoWorries() {
     selector.body.addClass("success");
     selector.statusCircle.addClass("success");
     document.documentElement.style.setProperty("--status-icon", iconCheck);
+
+    setBGReset();
 }
 
 function switchLanguage() {
@@ -140,7 +156,9 @@ ipc.once("content", (_event, content) => {
         updateLang();
         ipc.send("ready");
         if (content.showChangelog) {
-            const { value: changelog } = await Swal.fire({
+            const {
+                value: changelog
+            } = await Swal.fire({
                 title: lang.changelog.title,
                 text: lang.changelog.text.split("{version}").join(content.version),
                 input: "checkbox",
@@ -201,7 +219,9 @@ ipc.on("timeout", () => {
 });
 
 ipc.on("update-available", async (_event, updateInformation) => {
-    const {value: signature} = await Swal.fire({
+    const {
+        value: signature
+    } = await Swal.fire({
         title: lang.update.title,
         text: lang.update.text.split("{version}").join(updateInformation.version),
         allowOutsideClick: false,

@@ -19,7 +19,7 @@ async function init() {
         }
     }).add({
         targets: ".logo",
-        strokeDashoffset: ["6750px", "0px"],
+        strokeDashoffset: ["-4.5px", "0px"],
         duration: 2000,
         delay: 500
     }).add({

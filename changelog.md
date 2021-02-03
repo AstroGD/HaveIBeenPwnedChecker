@@ -1,3 +1,18 @@
+# V1.5.0
+#### Release: 03.02.2021
+
+## New
+* New Design and Icon - HaveIBeenPwned-Checker goes darker
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - follow-redirects from 1.13.0 to 1.13.2
+    - fs-extra from 9.0.1 to 9.1.0
+    - electron from 11.0.3 to 11.2.2
+    - electron-packager from 15.1.0 to 15.2.0
+* Updated Readme.md
+
 # V1.4.0
 #### Release: 25.11.2020
 
