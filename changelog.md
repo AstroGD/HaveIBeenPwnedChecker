@@ -1,3 +1,14 @@
+# V1.5.1
+#### Release: 10.04.2021
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security update.
+  Updated packages:
+    - follow-redirects from 1.13.2 to 1.13.3
+    - electron from 11.2.2 to 11.4.2
+* Updated jQuery to 3.6.0
+* Updated AnimeJS to 3.2.1
+
 # V1.5.0
 #### Release: 03.02.2021
 
