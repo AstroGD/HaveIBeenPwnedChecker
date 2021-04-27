@@ -1,3 +1,13 @@
+# TBA
+#### Release: TBA
+
+## Updates
+* Updated dependencies to the newest version. This is part of the monthly security updates.
+  Updated packages:
+    - Upgrade follow-redirects to 1.14.0
+    - Upgrade electron to 11.4.4
+
+
 # V1.5.1
 #### Release: 10.04.2021
 
