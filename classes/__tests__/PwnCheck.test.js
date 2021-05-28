@@ -50,6 +50,9 @@ describe(`Password`, () => {
         'method': 'GET',
         'hostname': 'api.pwnedpasswords.com',
         'path': `/range/5baa6`,
+        'headers': {
+            'User-Agent': 'HaveIBeenPwned Checker by AstroGD'
+        },
         'maxRedirects': 20
     };
 
@@ -111,7 +114,7 @@ describe(`Password`, () => {
         expect(password.ready).toBe(true);
         expect(password.hash).toBe("5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
         expect(password.identifier).toBe("5baa6");
-        expect(objectHasSameValues(requestOptions, password.requestOptions)).toBe(true);
+        expect(requestOptions).toEqual(password.requestOptions);
         expect(password.rawResponse).toBeDefined();
         expect(password.breached).toBe(true);
         expect(password.howOftenBreached).toBeGreaterThanOrEqual(3730471); //Number of breaches that disclosed the password as of 02/03/2020 (DD/MM/YYYY)
@@ -119,7 +122,7 @@ describe(`Password`, () => {
 
     test(`Check with false override requestOptions should fallback to default requestOptions`, async () => {
         await password.check("This is an incorrect value");
-        expect(objectHasSameValues(requestOptions, password.requestOptions)).toBe(true);
+        expect(requestOptions).toEqual(password.requestOptions);
     });
 
     test(`Misconfigured requestOptions should throw an error`, async () => {
@@ -127,6 +130,9 @@ describe(`Password`, () => {
             'method': 'GET',
             'hostname': 'api.pwnedpasswords.com',
             'path': `/range/axz12`, //Not a valid hex formatted string
+            'headers': {
+                'User-Agent': 'HaveIBeenPwned Checker by AstroGD'
+            },
             'maxRedirects': 20
         };
 
@@ -134,6 +140,9 @@ describe(`Password`, () => {
             'method': 'GET',
             'hostname': 'somethingswrong.astrogd.dev',
             'path': `/range/axz12`, //Not a valid hex formatted string
+            'headers': {
+                'User-Agent': 'HaveIBeenPwned Checker by AstroGD'
+            },
             'maxRedirects': 20
         };
 
