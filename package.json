@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/AstroGD/haveibeenpwnedchecker.git"
+    "url": "git+https://github.com/AstroGD/HaveIBeenPwnedChecker.git"
   },
   "author": "AstroGD Lukas Weber",
   "license": "CC-BY-NC-ND-4.0",
   "bugs": {
-    "url": "https://gitlab.com/AstroGD/haveibeenpwnedchecker/issues"
+    "url": "https://github.com/AstroGD/HaveIBeenPwnedChecker/issues"
   },
-  "homepage": "https://gitlab.com/AstroGD/haveibeenpwnedchecker#readme",
+  "homepage": "https://github.com/AstroGD/HaveIBeenPwnedChecker#readme",
   "dependencies": {
     "follow-redirects": "^1.14.0",
     "fs-extra": "^10.0.0"

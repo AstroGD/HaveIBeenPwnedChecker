@@ -2,6 +2,7 @@
 #### Release: TBA
 
 ## Updates
+* Updated git url in package.json
 * Added User Agent for requests to the HaveIBeenPwned API
 * Updated dependencies to the newest version. This is part of the monthly security updates.
   Updated packages:
