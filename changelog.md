@@ -1,7 +1,8 @@
-# TBA
-#### Release: TBA
+# V1.6.0
+#### Release: 28.05.2021
 
 ## Updates
+* Updated tests for newer jest version
 * Updated git url in package.json
 * Added User Agent for requests to the HaveIBeenPwned API
 * Updated dependencies to the newest version. This is part of the monthly security updates.
