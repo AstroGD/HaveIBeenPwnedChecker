@@ -104,6 +104,9 @@ class Password extends eventEmitter {
             'method': 'GET',
             'hostname': 'api.pwnedpasswords.com',
             'path': `/range/${this.identifier.toString()}`,
+            'headers': {
+                'User-Agent': 'HaveIBeenPwned Checker by AstroGD'
+            },
             'maxRedirects': 20
         };
 

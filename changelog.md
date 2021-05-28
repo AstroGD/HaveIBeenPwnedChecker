@@ -2,10 +2,13 @@
 #### Release: TBA
 
 ## Updates
+* Added User Agent for requests to the HaveIBeenPwned API
 * Updated dependencies to the newest version. This is part of the monthly security updates.
   Updated packages:
+    - Upgrade fs-extra to 10.0.0
+    - Upgrade jest to 27.0.1
     - Upgrade follow-redirects to 1.14.0
-    - Upgrade electron to 11.4.4
+    - Upgrade electron to 13.0.1
 
 
 # V1.5.1
