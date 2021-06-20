@@ -26,7 +26,7 @@
   "devDependencies": {
     "electron": "^13.0.1",
     "electron-packager": "^15.2.0",
-    "jest": "^27.0.1",
+    "jest": "^27.0.3",
     "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
     "tidy-jsdoc": "^1.4.0"
