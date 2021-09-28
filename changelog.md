@@ -1,3 +1,9 @@
+# V1.6.1
+#### Release: 28.09.2021
+
+## Updates
+* Updated Electron to V15
+
 # V1.6.0
 #### Release: 28.05.2021
 
