@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/AstroGD/HaveIBeenPwnedChecker#readme",
   "dependencies": {
-    "follow-redirects": "^1.14.0",
+    "follow-redirects": "^1.14.8",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
