@@ -1,3 +1,10 @@
+# V1.6.2
+#### Release: 13.06.2022
+
+## Updates
+* Updated Electron to V19
+* Updated Jest to V28
+
 # V1.6.1
 #### Release: 28.09.2021
 
