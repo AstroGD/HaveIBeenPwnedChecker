@@ -24,7 +24,7 @@
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
-    "electron": "19.0.4",
+    "electron": "26.6.8",
     "electron-packager": "^15.2.0",
     "jest": "28.1.1",
     "jsdoc": "^3.6.6",
