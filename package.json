@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "electron": "19.0.4",
-    "electron-packager": "^15.2.0",
+    "electron-packager": "^17.1.2",
     "jest": "28.1.1",
     "jsdoc": "^3.6.6",
     "minami": "^1.2.3",
